@@ -23,7 +23,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm ci --prefix functions`n      - run: npm run build
+      - run: npm ci --prefix functions`r`n      - run: npm run build
         env:
           GITHUB_PAGES: true
       - run: cp dist/index.html dist/404.html
@@ -32,4 +32,5 @@ jobs:
           path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
+
 
