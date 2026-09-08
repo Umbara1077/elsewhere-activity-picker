@@ -12,7 +12,7 @@ async function browserDiscovery(zip, radius, fetcher) {
  const q=`[out:json][timeout:20];nwr(around:${around},${location.lat},${location.lon})[name][amenity~"restaurant|cafe|fast_food|bar|cinema|theatre|arts_centre|museum|park|library"];out center tags;`;
  const osm=await fetcher(`https://maps.mail.ru/osm/tools/overpass/api/interpreter?data=${encodeURIComponent(q)}`);
  if(!osm.ok) throw new Error('Nearby discovery is temporarily unavailable.');
- const body=await osm.json(); const activities=(body.elements||[]).map((e,i)=>{const t=e.tags||{},lat=Number(e.lat??e.center?.lat),lon=Number(e.lon??e.center?.lon),amenity=t.amenity||''; const category=amenity==='park'?'outdoors':(['museum','library','theatre','cinema','arts_centre'].includes(amenity)?'culture':'food'); return {id:`osm-${e.type}-${e.id}`,title:t.name,description:`A local ${amenity.replace('_',' ')} near ${location.city}.`,category,moods:['anything','fun','chill','romantic','family','adventurous'],source:'OpenStreetMap',lat,lon,distance:milesBetween(location.lat,location.lon,lat,lon),image:category==='food'?`${import.meta.env.BASE_URL}images/dining.jpg`:`${import.meta.env.BASE_URL}images/coast.jpg`,indoor:category==='food'||category==='culture',dining:category==='food'?['sitdown','takeout']:undefined}).filter(a=>Number.isFinite(a.lat)&&Number.isFinite(a.lon));
+ const body=await osm.json(); const activities=(body.elements||[]).map((e,i)=>{const t=e.tags||{},lat=Number(e.lat??e.center?.lat),lon=Number(e.lon??e.center?.lon),amenity=t.amenity||''; const category=amenity==='park'?'outdoors':(['museum','library','theatre','cinema','arts_centre'].includes(amenity)?'culture':'food'); return {id:`osm-${e.type}-${e.id}`,title:t.name,description:`A local ${amenity.replace('_',' ')} near ${location.city}.`,category,moods:['anything','fun','chill','romantic','family','adventurous'],source:'OpenStreetMap',lat,lon,distance:milesBetween(location.lat,location.lon,lat,lon),image:category==='food'?`${import.meta.env.BASE_URL}images/dining.jpg`:`${import.meta.env.BASE_URL}images/coast.jpg`,indoor:category==='food'||category==='culture',dining:category==='food'?['sitdown','takeout']:undefined};}).filter(a=>Number.isFinite(a.lat)&&Number.isFinite(a.lon));
  return {location,activities,message:`Found ${activities.length} places from OpenStreetMap.`,fetchedAt:new Date().toISOString()};
 }
 export function discoverLocal(zip, radius, fetcher = fetch) {
@@ -47,3 +47,4 @@ export function chooseLocal(items, filters, visited, history=[], random=Math.ran
  const pool=fresh.length?fresh:nonPrevious.length?nonPrevious:eligible;
  return pool.length?pool[Math.min(pool.length-1,Math.floor(random()*pool.length))]:null;
 }
+
