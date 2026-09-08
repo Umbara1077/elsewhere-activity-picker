@@ -1,0 +1,16 @@
+{
+  "functions": { "source": "functions" },
+  "hosting": {
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "rewrites": [
+      { "source": "/api/discover", "function": { "functionId": "discover", "region": "us-east1" } },
+      { "source": "**", "destination": "/index.html" }
+    ],
+    "headers": [
+      { "source": "**/*.@(js|css|svg|jpg|jpeg|png|webp)", "headers": [{ "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }] }
+    ]
+  },
+  "firestore": { "rules": "firestore.rules" }
+}

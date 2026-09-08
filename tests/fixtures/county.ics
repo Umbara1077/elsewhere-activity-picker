@@ -1,0 +1,12 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:Elsewhere test fixture
+X-WR-TIMEZONE:America/New_York
+BEGIN:VEVENT
+DTEND;TZID=America/New_York:20260912T113000
+DTSTART;TZID=America/New_York:20260912T083000
+LOCATION:Scotland Run Park - 980 E Academy Street Clayton NJ 08312
+SUMMARY:The 40th Annual Kid's Fishing Contest
+UID:2169
+END:VEVENT
+END:VCALENDAR

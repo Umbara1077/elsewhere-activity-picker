@@ -1,0 +1,19 @@
+Elsewhere artwork and imagery
+
+The chrome coastal portal is original generated artwork created for this app with the built-in image generation tool. It is a fictional inspiration scene.
+
+Coastal photo: Nicholas Ng / Unsplash
+https://unsplash.com/photos/aerial-view-of-beautiful-cliffs-and-ocean-0JrBvqcuKKw
+Dining photo: Jan Machacek / Unsplash
+https://unsplash.com/photos/outdoor-dining-area-with-string-lights-at-dusk-DJvLanXk5ZE
+Festival photo: Keoma Oran / Unsplash
+https://unsplash.com/photos/crowd-gathered-at-an-outdoor-music-festival-at-dusk-K_ajQ6LDqSg
+These photographs are illustrative, not photographs of named local venues.
+Unsplash license: https://unsplash.com/license
+
+Local venue data: OpenStreetMap contributors, ODbL
+https://www.openstreetmap.org/copyright
+ZIP lookup: Zippopotam.us
+https://docs.zippopotam.us/
+Official launch-area event feed: Gloucester County Parks & Recreation
+https://www.gloucestercountynj.gov/common/modules/iCalendar/iCalendar.aspx?catID=29&feed=calendar
