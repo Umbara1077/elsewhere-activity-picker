@@ -1,14 +1,20 @@
+import { localCatalog } from '../../functions/local-catalog.mjs';
 import { normalizeVenue } from '../../functions/venue.mjs';
 import { validActivity } from './places-state.mjs';
 import { milesBetween, filterActivities } from './picker.mjs';
 
 const requests = new Map();
+export function catalogResult(location,radius,now=new Date()) {
+ const activities=localCatalog.activities.map(a=>({...a,distance:milesBetween(location.lat,location.lon,a.lat,a.lon)})).filter(a=>a.distance<=radius&&(!a.date||new Date(a.endDate||a.date)>=now));
+ return {location,activities,fetchedAt:localCatalog.fetchedAt,message:'Local source snapshot checked September 9, 2026. '+activities.length+' places and dated events within your radius. Date-night recommendations include source-backed dining details; availability is not live.'};
+}
 export async function browserDiscovery(zip, radius, fetcher) {
  const geo=await fetcher('https://api.zippopotam.us/us/'+zip,{signal:AbortSignal.timeout(15000)});
  if(!geo.ok) throw new Error('We could not locate that ZIP code.');
  const place=await geo.json(), p=place.places?.[0];
  const location={zip,city:p?.['place name']||zip,state:p?.['state abbreviation']||'',lat:Number(p?.latitude),lon:Number(p?.longitude)};
  if(!Number.isFinite(location.lat)||!Number.isFinite(location.lon)) throw new Error('That ZIP code did not return a usable location.');
+ if(milesBetween(location.lat,location.lon,localCatalog.location.lat,localCatalog.location.lon)<10){const cached=catalogResult(location,radius);if(cached.activities.length)return cached;}
  const around=Math.min(Number(radius)||25,100)*1609.34;
  const selectors=['[amenity=restaurant]','[amenity~"cafe|fast_food|bar|pub"]','[amenity~"cinema|theatre|arts_centre"]','[leisure~"park|nature_reserve|bowling_alley|miniature_golf|escape_game"]','[tourism~"museum|gallery|viewpoint|zoo|aquarium"]','[natural=beach]'];
  const groups=await Promise.allSettled(selectors.map(async selector=>{
@@ -24,6 +30,8 @@ export async function browserDiscovery(zip, radius, fetcher) {
 export function discoverLocal(zip, radius, fetcher = fetch) {
  if (!/^\d{5}$/.test(zip)) return Promise.reject(new Error('Enter a valid five-digit US ZIP code.'));
  const key=`${zip}:${radius}`;
+ // Keep local discovery usable even when public map APIs time out.
+ if(zip==='08094')return Promise.resolve(catalogResult(localCatalog.location,radius));
  const existing=requests.get(key);
  if (existing && existing.expires>Date.now()) return existing.promise;
  const promise=(async()=>{

@@ -16,6 +16,6 @@ test('dining preference excludes non-food; outdoor, beach and entertainment type
  assert.equal(chooseLocal([park,beach,bowling],{...filters,category:'all',mood:'anything'},[]),null);
 });
 test('browser production provider uses identical classification and correct OSM selectors',async()=>{
- const queries=[];const fetcher=async url=>{if(url.includes('zippopotam'))return {ok:true,json:async()=>({places:[{latitude:'39.665',longitude:'-74.971','place name':'Williamstown'}]})};queries.push(decodeURIComponent(url));return {ok:true,json:async()=>({elements:[{id:1,type:'node',lat:39.66,lon:-74.97,tags:{name:'Dunkin',amenity:'cafe',takeaway:'yes'}}]})};};
+ const queries=[];const fetcher=async url=>{if(url.includes('zippopotam'))return {ok:true,json:async()=>({places:[{latitude:'40.75',longitude:'-73.99','place name':'Williamstown'}]})};queries.push(decodeURIComponent(url));return {ok:true,json:async()=>({elements:[{id:1,type:'node',lat:40.75,lon:-73.99,tags:{name:'Dunkin',amenity:'cafe',takeaway:'yes'}}]})};};
  const result=await browserDiscovery('08094',25,fetcher);assert.equal(result.activities.length,1);assert.equal(result.activities[0].moods.includes('romantic'),false);assert.deepEqual(result.activities[0].dining,['takeout']);assert.ok(queries.some(q=>q.includes('[leisure~')));assert.ok(queries.some(q=>q.includes('[natural=beach]')));
 });

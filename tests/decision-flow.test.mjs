@@ -1,13 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { discoverLocal, mergeLocalActivities, chooseLocal } from '../src/lib/discovery-client.mjs';
-const origin={zip:'08094',city:'Williamstown',state:'NJ',lat:39.665,lon:-74.971};
+const origin={zip:'10001',city:'Williamstown',state:'NJ',lat:39.665,lon:-74.971};
 const filters={category:'all',mood:'anything',radius:25,budget:200,dining:'any',date:'any',newOnly:false,indoor:'any',accessible:false,query:''};
 const venue={id:'venue-1',title:'A named local restaurant',description:'A real listing',source:'OpenStreetMap',category:'food',moods:['fun'],lat:39.69,lon:-74.99};
 test('cold-start picking waits for real discovery; simultaneous requests share a fetch',async()=>{
  let calls=0;let release;const gate=new Promise(resolve=>{release=resolve;});
  const fetcher=async()=>{calls++;await gate;return {ok:true,json:async()=>({location:origin,activities:[venue,{...venue,id:'idea',inspiration:true},{...venue,id:'search',source:'Live web search'}]})};};
- const first=discoverLocal('08094',25,fetcher),second=discoverLocal('08094',25,fetcher);assert.equal(first,second);assert.equal(calls,1);release();
+ const first=discoverLocal('10001',25,fetcher),second=discoverLocal('10001',25,fetcher);assert.equal(first,second);assert.equal(calls,1);release();
  const result=await first;assert.deepEqual(result.activities,[venue]);const decision=chooseLocal(mergeLocalActivities([],[],result.activities,result.location),filters,[],[],()=>0);assert.equal(decision.id,venue.id);
 });
 test('roll again cycles actual results before repeating and never chooses ideas',()=>{

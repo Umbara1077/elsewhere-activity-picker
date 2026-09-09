@@ -8,3 +8,6 @@ functions/.env.*
 .firebase/
 *-debug.log
 *.tsbuildinfo
+test-results/
+playwright-report/
+scripts/*.png
