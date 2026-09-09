@@ -8,3 +8,30 @@
 .result-outbound{display:flex;gap:18px;flex-wrap:wrap;margin-top:21px;padding-top:16px;border-top:1px solid #d2ff8c20}.result-outbound a{display:flex;align-items:center;gap:7px;font-size:12px;color:#acc793}.result-outbound a:hover{color:var(--green)}.event-time,.venue-hours{display:flex;align-items:center;gap:9px;font-size:13px!important}.event-time svg,.venue-hours svg{flex:none}.result-actions>.dark-button{flex:1}.card-image-button{transform:perspective(1000px) rotateX(calc(var(--tilt-y,0)*-2deg)) rotateY(calc(var(--tilt-x,0)*2deg));transition:transform .35s}
 @media(max-width:370px){.cinema-copy h1{font-size:59px}.cinema-copy>.eyebrow{font-size:7px}.title-asterisk{right:8px}.hero-status{font-size:6px}.hero-status>span:last-child{font-size:7px}.world-caption strong{font-size:21px}.mood-chip{padding:8px;font-size:10px}.section-top h2{font-size:30px}.card-copy{padding:17px 15px 0}.card-title{font-size:19px}.portal-cta{font-size:12px;padding:15px 16px}.explore-circle{width:44px;height:44px}}
 @media(prefers-reduced-motion:reduce){.title-asterisk,.hero-status>span>i,.reveal-compass>svg{animation:none!important}.world-image{transition:none!important}}
+/* Phone controls stay readable, reachable and clear of browser safe areas. */
+.quick-plans{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;align-items:center}.quick-plans>span{font-size:12px;color:var(--muted);margin-right:4px}.quick-plans button{border:1px solid #45573a;border-radius:24px;padding:10px 14px;min-height:44px;color:#d2e5c0;background:#152010}.quick-plans button:hover{border-color:var(--green)}
+.mobile-pick-bar{display:none}
+@media(max-width:800px){
+ input,select,textarea,.search-field input,.search-field select,.compact-search input,.filter-fields select,.add-form input,.add-form select,.add-form textarea{font-size:16px!important}
+ .mood-chip,.dining-options button,.section-actions button,.world-options button,.text-button,.icon-button,.save-button{min-height:44px;min-width:44px}
+ .dialog-content{max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;padding-bottom:max(24px,env(safe-area-inset-bottom))}
+ .result-dialog>.dialog-title{padding-right:66px;overflow-wrap:anywhere}.close-button{z-index:2}.result-actions,.result-bottom,.result-outbound{flex-wrap:wrap;gap:12px}.result-outbound a{display:inline-flex;align-items:center;min-height:44px}
+ .card-tag{max-width:calc(100% - 85px);white-space:normal;line-height:1.4;overflow-wrap:anywhere}
+}
+@media(max-width:560px){
+ .app-shell{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+ .search-row{position:relative;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+ .location-field{grid-column:1/-1;grid-row:1;padding-right:100px;border:1px solid #35412f;border-radius:8px;min-width:0}
+ .location-field>span{min-width:0}.location-field input{width:100%}
+ .search-row>.search-field:nth-child(2){grid-column:1;grid-row:2;min-width:0}
+ .search-row .when-field{grid-column:2;grid-row:2;margin-left:0;width:100%!important;min-width:0;padding:10px}
+ .search-field>span,.search-field select{min-width:0;max-width:100%}
+ .search-row>.more-filters,.search-row>.search-button{position:absolute;top:0;width:44px;min-width:44px;height:62px;grid-column:auto;grid-row:auto}
+ .search-row>.more-filters{right:44px}.search-row>.search-button{right:0;border-radius:0 8px 8px 0}
+ .search-row>.surprise-button{grid-row:3;grid-column:1/-1}
+ .mood-options{gap:8px}.mood-chip{font-size:12px}.section-actions{flex-wrap:wrap}.dining-options button{padding:10px 13px}
+ .mobile-pick-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:fixed;bottom:0;left:0;right:0;z-index:25;padding:12px 18px calc(12px + env(safe-area-inset-bottom));border-top:1px solid #66844860;background:#10190ff2;backdrop-filter:blur(16px)}
+ .mobile-pick-bar span{font-size:13px;color:#c2d5b0}.mobile-pick-bar button{min-height:48px;border-radius:28px;padding:12px 22px;background:var(--green);color:#182610;font-weight:600}
+ .toast{bottom:calc(90px + env(safe-area-inset-bottom))}.form-two{grid-template-columns:1fr}.result-meta{flex-wrap:wrap}
+ .quick-plans{gap:7px}.quick-plans>span{width:100%}.quick-plans button{font-size:13px}
+}

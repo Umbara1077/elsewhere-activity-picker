@@ -1,4 +1,4 @@
-// Source snapshot collected 2026-09-09. Distances are calculated for the requested ZIP.
+// Local sources checked September 9, 2026. Approximate distances use source/address coordinates.
 export const localCatalog = {
   "location": {
     "zip": "08094",
@@ -1286,19 +1286,24 @@ export const localCatalog = {
     {
       "id": "osm-node-9194734517",
       "title": "Edelman Planetarium",
-      "description": "cinema. Matched using the venue type and published attributes.",
+      "description": "Plan a public planetarium show with immersive projections and stargazing. A suggested indoor date or family outing; check the public schedule and book a specific show before traveling.",
       "category": "culture",
       "moods": [
-        "fun"
+        "family",
+        "fun",
+        "romantic",
+        "chill"
       ],
       "matchReason": "Matched using the venue type and published attributes.",
       "classificationVersion": 2,
-      "source": "OpenStreetMap",
+      "source": "Rowan University · official website",
       "lat": 39.709746,
       "lon": -75.1204909,
       "distance": 8.528639233092171,
-      "url": "https://www.openstreetmap.org/node/9194734517",
-      "address": ""
+      "url": "https://sites.rowan.edu/planetarium/",
+      "address": "",
+      "indoor": true,
+      "checkedAt": "2026-09-09"
     },
     {
       "id": "osm-way-559164451",
@@ -1377,6 +1382,102 @@ export const localCatalog = {
       "url": "https://www.openstreetmap.org/node/1769450168",
       "address": "",
       "accessible": true
+    },
+    {
+      "id": "verified-franklinville",
+      "title": "The Franklinville Inn",
+      "category": "food",
+      "moods": [
+        "romantic",
+        "chill"
+      ],
+      "dining": [
+        "sitdown"
+      ],
+      "indoor": true,
+      "lat": 39.618132896573,
+      "lon": -75.080908839509,
+      "address": "2526 Delsea Drive, Franklinville, NJ 08322",
+      "url": "https://franklinvilleinn.com/",
+      "source": "Franklinville Inn · official website",
+      "description": "Reserve a table for American cuisine in a restored inn. A date-night suggestion based on warm lighting, a wine list, and an intimate dining setting.",
+      "hours": "Tue–Thu 4:30–9 pm; Fri 4:30–10 pm; Sat 4–10 pm.",
+      "phone": "856-694-1577",
+      "checkedAt": "2026-09-09",
+      "evidenceUrls": [
+        "https://franklinvilleinn.com/"
+      ]
+    },
+    {
+      "id": "verified-highlander",
+      "title": "Highlander Pub & Grill",
+      "category": "food",
+      "moods": [
+        "fun",
+        "family",
+        "chill"
+      ],
+      "dining": [
+        "sitdown"
+      ],
+      "indoor": true,
+      "lat": 39.699525041101,
+      "lon": -75.051852845074,
+      "address": "2626 Fries Mill Road, Williamstown, NJ 08094",
+      "url": "https://scotlandrun.com/highlander-pub-grill/",
+      "source": "Scotland Run · official website",
+      "description": "A public golf-club tavern for sandwiches, steaks, pasta, and seafood. Choose a relaxed lunch or dinner; Sunday brunch is also offered.",
+      "hours": "Monday closed. Tue–Sun lunch and dinner from noon; Sunday brunch 10 am–2 pm.",
+      "phone": "856-863-3737",
+      "checkedAt": "2026-09-09",
+      "evidenceUrls": [
+        "https://scotlandrun.com/highlander-pub-grill/"
+      ]
+    },
+    {
+      "id": "verified-heritage",
+      "title": "William Heritage Winery — Mullica Hill",
+      "category": "culture",
+      "moods": [
+        "romantic",
+        "chill",
+        "fun"
+      ],
+      "indoor": true,
+      "lat": 39.724966449326,
+      "lon": -75.175562014938,
+      "address": "480 Mullica Hill Road, Mullica Hill, NJ 08062",
+      "url": "https://heritagewinenj.com/visit/mullica-hill-tasting-room/",
+      "source": "William Heritage Winery · official website",
+      "description": "Share a tasting flight or a glass of wine with light bites. Indoor and outdoor seating are first-come, first-served. Wine service is for guests 21+.",
+      "hours": "Open seven days; check the tasting room for current hours.",
+      "checkedAt": "2026-09-09",
+      "evidenceUrls": [
+        "https://heritagewinenj.com/visit/mullica-hill-tasting-room/"
+      ]
+    },
+    {
+      "id": "verified-oc-boardwalk",
+      "title": "Ocean City Boardwalk stroll",
+      "category": "daytrip",
+      "moods": [
+        "family",
+        "fun",
+        "chill",
+        "romantic"
+      ],
+      "indoor": false,
+      "lat": 39.275353822147,
+      "lon": -74.570477658043,
+      "address": "825 Boardwalk, Ocean City, NJ 08226",
+      "url": "https://oceancityvacation.com/shopping/boardwalk/",
+      "source": "Ocean City tourism · official website",
+      "description": "Take a shore trip for a boardwalk walk, ocean views, and optional treats or amusements. Stores and attractions have seasonal hours; beach access has separate rules and costs.",
+      "hours": "Boardwalk open year-round; individual businesses vary.",
+      "checkedAt": "2026-09-09",
+      "evidenceUrls": [
+        "https://oceancityvacation.com/shopping/boardwalk/"
+      ]
     }
   ],
   "searchLinks": [

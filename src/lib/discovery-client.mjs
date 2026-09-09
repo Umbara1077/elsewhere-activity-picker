@@ -1,3 +1,4 @@
+import { livePublicEvents } from './live-events.mjs';
 import { localCatalog } from '../../functions/local-catalog.mjs';
 import { normalizeVenue } from '../../functions/venue.mjs';
 import { validActivity } from './places-state.mjs';
@@ -31,10 +32,14 @@ export function discoverLocal(zip, radius, fetcher = fetch) {
  if (!/^\d{5}$/.test(zip)) return Promise.reject(new Error('Enter a valid five-digit US ZIP code.'));
  const key=`${zip}:${radius}`;
  // Keep local discovery usable even when public map APIs time out.
- if(zip==='08094')return Promise.resolve(catalogResult(localCatalog.location,radius));
+
  const existing=requests.get(key);
  if (existing && existing.expires>Date.now()) return existing.promise;
  const promise=(async()=>{
+  if(zip==='08094'){
+   const base=catalogResult(localCatalog.location,radius);
+   try{const events=await livePublicEvents(base.location,radius,fetcher);return {...base,activities:[...base.activities,...events],message:base.message+' '+events.length+' timed events from the live Visit South Jersey calendar.'};}catch{return {...base,message:base.message+' Live calendar unavailable; saved local choices remain usable.'};}
+  }
   if(typeof window!=='undefined' && window.location.hostname.endsWith('github.io')) return browserDiscovery(zip,radius,fetcher);
   let response;
   try { response=await fetcher(`/api/discover?zip=${zip}&radius=${radius}`,{signal:AbortSignal.timeout(45000)}); } catch { return browserDiscovery(zip,radius,fetcher); }
