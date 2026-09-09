@@ -12,12 +12,13 @@ export function milesBetween(lat1, lon1, lat2, lon2) {
 }
 export function filterActivities(items, filters, visited = [], now = new Date()) {
  return items.filter(a => {
+  if(!a.personal && a.source==='OpenStreetMap' && filters.mood==='romantic' && a.classificationVersion!==2)return false;
   if (filters.category !== 'all' && a.category !== filters.category) return false;
   if (filters.mood !== 'anything' && !a.moods.includes(filters.mood)) return false;
   if (filters.newOnly && (visited.includes(a.id) || a.visited)) return false;
   if (a.distance != null && a.distance > filters.radius) return false;
   if (filters.budget < 200 && (a.price == null || a.price > filters.budget)) return false;
-  if (filters.dining !== 'any' && a.category === 'food' && !a.dining?.includes(filters.dining)) return false;
+  if (filters.dining !== 'any' && (a.category !== 'food' || !a.dining?.includes(filters.dining))) return false;
   if (filters.indoor !== 'any' && a.indoor !== (filters.indoor === 'indoor')) return false;
   if (filters.accessible && a.accessible !== true) return false;
   if (filters.query && !`${a.title} ${a.description} ${a.address || ''}`.toLowerCase().includes(filters.query.toLowerCase())) return false;

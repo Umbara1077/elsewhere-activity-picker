@@ -1,3 +1,4 @@
+import { normalizeVenue } from './venue.mjs';
 import { createHash } from 'node:crypto';
 import ical from 'node-ical';
 import { load } from 'cheerio';
@@ -28,13 +29,7 @@ const json=async(url,options)=>JSON.parse(await fetchText(url,options));
 export async function geocode(zip) {
  return cached(`zip:${zip}`,async()=>{const data=await json(`https://api.zippopotam.us/us/${zip}`);const p=data.places?.[0];if(!p)throw Error('ZIP not found');return {zip,city:p['place name'],state:p['state abbreviation'],lat:number(p.latitude),lon:number(p.longitude)};},86400000);
 }
-export function osmActivity(element,origin) {
- const tags=element.tags||{},lat=number(element.lat??element.center?.lat),lon=number(element.lon??element.center?.lon);
- if(!tags.name||!coords(lat,lon))return null;
- const category=/^(restaurant|cafe|fast_food|bar|pub)$/.test(tags.amenity)?'food':/^(museum|gallery)$/.test(tags.tourism)||/^(cinema|theatre)$/.test(tags.amenity)?'culture':tags.natural==='beach'?'daytrip':'outdoors';
- const dining=category==='food'?[...(['yes','only'].includes(tags.takeaway)?['takeout']:[]),...(tags.indoor_seating==='yes'||tags.outdoor_seating==='yes'?['sitdown']:[])]:undefined;
- return {id:`osm-${element.type}-${element.id}`,title:text(tags.name,120),category,description:text(tags.description||`${tags.cuisine?tags.cuisine.replaceAll(';',', ')+' cuisine. ':''}A nearby ${tags.amenity||tags.tourism||tags.leisure||tags.natural||'place'} listed in OpenStreetMap. Check the venue for hours and details.`),moods:category==='food'?['romantic','fun','chill']:['family','chill','adventurous'],distance:miles(origin,{lat,lon}),source:'OpenStreetMap',url:safeUrl(tags.website||tags['contact:website'])||`https://www.openstreetmap.org/${element.type}/${element.id}`,address:text([tags['addr:housenumber'],tags['addr:street'],tags['addr:city']].filter(Boolean).join(' ')),lat,lon,hours:text(tags.opening_hours,300)||undefined,phone:text(tags.phone||tags['contact:phone'],50)||undefined,cuisine:text(tags.cuisine?.replaceAll(';',', '),120)||undefined,dining: dining?.length?dining:undefined,indoor:tags.indoor==='yes'||tags.indoor_seating==='yes'?true:tags.indoor==='no'?false:undefined,accessible:tags.wheelchair==='yes'?true:tags.wheelchair==='no'?false:undefined};
-}
+export const osmActivity = normalizeVenue;
 let osmBusy=false;
 export async function osmPlaces(origin,radius) {
  return cached(`osm:${origin.zip}:${radius}`,async()=>{
@@ -116,14 +111,14 @@ async function ticketmaster(origin,radius,key) {
   const venue=event._embedded?.venues?.[0],lat=number(venue?.location?.latitude),lon=number(venue?.location?.longitude);
   if(!coords(lat,lon)||event.dates?.status?.code==='cancelled')return [];
   const date=event.dates?.start?.dateTime||event.dates?.start?.localDate;if(!date||!Number.isFinite(+new Date(date)))return [];
-  return [{id:`tm-${event.id}`,title:text(event.name,120),description:text(event.info||event.pleaseNote||'A local event. Check the organizer for tickets and full details.'),category:'events',moods:['fun','romantic','adventurous'],source:'Ticketmaster',url:safeUrl(event.url),address:text([venue?.name,venue?.city?.name,venue?.state?.stateCode].filter(Boolean).join(' · ')),date,lat,lon,distance:miles(origin,{lat,lon}),price:number(event.priceRanges?.[0]?.min),image:safeUrl(event.images?.find(i=>i.ratio==='16_9')?.url||event.images?.[0]?.url)}];
+  return [{id:`tm-${event.id}`,title:text(event.name,120),description:text(event.info||event.pleaseNote||'A local event. Check the organizer for tickets and full details.'),category:'events',moods:['fun'],source:'Ticketmaster',url:safeUrl(event.url),address:text([venue?.name,venue?.city?.name,venue?.state?.stateCode].filter(Boolean).join(' · ')),date,lat,lon,distance:miles(origin,{lat,lon}),price:number(event.priceRanges?.[0]?.min),image:safeUrl(event.images?.find(i=>i.ratio==='16_9')?.url||event.images?.[0]?.url)}];
  });
 }
 async function googlePlaces(origin,radius,key) {
  if(!key)return [];
  const fields='places.id,places.displayName,places.formattedAddress,places.googleMapsUri,places.location,places.primaryType,places.dineIn,places.takeout,places.accessibilityOptions';
  const body=await json('https://places.googleapis.com/v1/places:searchText',{method:'POST',headers:{'content-type':'application/json','X-Goog-Api-Key':key,'X-Goog-FieldMask':fields},body:JSON.stringify({textQuery:`restaurants and cafes near ${origin.zip}`,locationBias:{circle:{center:{latitude:origin.lat,longitude:origin.lon},radius:Math.min(radius*1609.34,50000)}},pageSize:20})});
- return (body.places||[]).flatMap(place=>{const lat=number(place.location?.latitude),lon=number(place.location?.longitude);if(!coords(lat,lon))return [];const dining=[...(place.dineIn===true?['sitdown']:[]),...(place.takeout===true?['takeout']:[])];return [{id:`google-${place.id}`,title:text(place.displayName?.text,120),category:'food',description:'A nearby restaurant or café from Google Places. Open the listing for menu, hours, and current details.',moods:['fun','romantic','chill'],source:'Google Places',url:safeUrl(place.googleMapsUri),address:text(place.formattedAddress),lat,lon,distance:miles(origin,{lat,lon}),dining:dining.length?dining:undefined,accessible:place.accessibilityOptions?.wheelchairAccessibleEntrance}];});
+ return (body.places||[]).flatMap(place=>{const lat=number(place.location?.latitude),lon=number(place.location?.longitude);if(!coords(lat,lon))return [];const dining=[...(place.dineIn===true?['sitdown']:[]),...(place.takeout===true?['takeout']:[])];return [{id:`google-${place.id}`,title:text(place.displayName?.text,120),category:'food',description:'A nearby restaurant or café from Google Places. Open the listing for menu, hours, and current details.',moods:['chill'],source:'Google Places',url:safeUrl(place.googleMapsUri),address:text(place.formattedAddress),lat,lon,distance:miles(origin,{lat,lon}),dining:dining.length?dining:undefined,accessible:place.accessibilityOptions?.wheelchairAccessibleEntrance}];});
 }
 export function searchLinks(origin) {
  const term=t=>encodeURIComponent(`${t} near ${origin.city}, ${origin.state} ${origin.zip}`);
